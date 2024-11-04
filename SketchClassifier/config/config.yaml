@@ -1,0 +1,23 @@
+data:
+  processed_dir: "data/processed"
+model:
+  num_classes: 250
+  input_shape: [1, 224, 224]  # Assuming grayscale images
+
+training:
+  num_epochs: 100
+  batch_size: 128
+  pre_trained_lr: 0.0001  # Lower learning rate for pre-trained layers
+  classifier_lr: 0.001    # Higher learning rate for new layers
+  lr_step_size: 10
+  lr_gamma: 0.5
+  patience: 5
+  min_delta: 0.01
+  device: "cuda"  # Change to "cpu" if GPU is unavailable
+
+
+
+
+mlflow:
+  experiment_name: "SketchClassifier_Experiment2"
+  run_name: "SketchClassifier_Run"

@@ -1,9 +1,10 @@
-name: SketchClassifier
+name: SketchClassifier2
 
 conda_env: conda.yaml
 
 entry_points:
   prepare_data:
-    command: "python src/data/prepare_data.py"
+    command: "python -m src.data.prepare_data.py"
+  
   train:
-    command: "python src/models/train_model.py"
+    command: "python -m src.models.train_model"

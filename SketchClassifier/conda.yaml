@@ -1,9 +1,16 @@
 name: sketch_classifier_env
 channels:
+  - pytorch
+  - nvidia
   - defaults
   - conda-forge
 dependencies:
   - python=3.10
+  - pytorch=2.5.1
+  - torchvision=0.20.1
+  - torchaudio=2.5.1
+  - pytorch-cuda=11.8
+  - cudatoolkit=11.8
   - pip
   - pip:
     - mlflow
@@ -12,3 +19,4 @@ dependencies:
     - scikit-image
     - tqdm
     - datasets
+    - pyyaml

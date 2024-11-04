@@ -148,6 +148,74 @@ def inspect_npz_file(file_path):
             print(f"  Number of elements: {array.size}")
             print()
 
+
+
+def load_data(processed_dir, verbose=False):    # Convert processed_dir to an absolute path
+    processed_dir = os.path.abspath(processed_dir)
+    if verbose:
+        print(f"Using processed directory: {processed_dir}")
+
+    try:
+        # Define paths to each processed data file
+        train_images_path = os.path.join(processed_dir, 'X_train.npz')
+        train_labels_path = os.path.join(processed_dir, 'y_train.npz')
+        val_images_path = os.path.join(processed_dir, 'X_val.npz')
+        val_labels_path = os.path.join(processed_dir, 'y_val.npz')
+        test_images_path = os.path.join(processed_dir, 'X_test.npz')
+        test_labels_path = os.path.join(processed_dir, 'y_test.npz')
+
+        if verbose:
+            print(f"Looking for training images at: {train_images_path}")
+            print(f"Looking for training labels at: {train_labels_path}")
+            print(f"Looking for validation images at: {val_images_path}")
+            print(f"Looking for validation labels at: {val_labels_path}")
+            print(f"Looking for test images at: {test_images_path}")
+            print(f"Looking for test labels at: {test_labels_path}")
+
+        # Initialize a data dictionary to hold all loaded datasets
+        data = {}
+
+        # Load training data if both image and label files exist
+        if os.path.exists(train_images_path) and os.path.exists(train_labels_path):
+            data['X_train'] = np.load(train_images_path)['images']
+            data['y_train'] = np.load(train_labels_path)['labels']
+            if verbose:
+                print(f"Training data loaded: {data['X_train'].shape}, {data['y_train'].shape}")
+        else:
+            print("Training data files not found in processed_dir.")
+            return None
+
+        # Load validation data if both image and label files exist
+        if os.path.exists(val_images_path) and os.path.exists(val_labels_path):
+            data['X_val'] = np.load(val_images_path)['images']
+            data['y_val'] = np.load(val_labels_path)['labels']
+            if verbose:
+                print(f"Validation data loaded: {data['X_val'].shape}, {data['y_val'].shape}")
+        else:
+            print("Validation data files not found in processed_dir.")
+            return None
+
+        # Load test data if both image and label files exist
+        if os.path.exists(test_images_path) and os.path.exists(test_labels_path):
+            data['X_test'] = np.load(test_images_path)['images']
+            data['y_test'] = np.load(test_labels_path)['labels']
+            if verbose:
+                print(f"Test data loaded: {data['X_test'].shape}, {data['y_test'].shape}")
+        else:
+            print("Test data files not found in processed_dir.")
+            return None
+
+        return data
+
+    except FileNotFoundError as fnf_error:
+        print(f"FileNotFoundError: {fnf_error}")
+        return None
+    except Exception as e:
+        print(f"Error loading data: {e}")
+        return None
+
+
+
 if __name__ == "__main__":
     # Set verbose to True or False based on preference
     results = preprocess_data("data/raw", "data/processed", max_images=20000, verbose=True)
