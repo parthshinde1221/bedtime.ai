@@ -5,7 +5,7 @@ This project creates a personalized bedtime story system that leverages AI advan
 
 ## Sketch Image Classification with EfficientNet-B0
 
-This project fine-tunes a modified EfficientNet-B0 model for classifying sketch images. EfficientNet-B0, a state-of-the-art architecture designed for image classification tasks, has been adapted to work with single-channel grayscale images. The model achieves approximately **70% accuracy** on our sketch image dataset.
+We have used EfficientNet model for classifying children's drawings, with a focus on enabling future use in story-building applications. The EfficientNet architecture, known for its state-of-the-art performance in image classification, has been adapted to work with single-channel grayscale images. The model achieves approximately 70% accuracy on our children's drawing dataset, providing a strong foundation for generating meaningful and interactive stories based on children's artwork.
 
 ### Model Architecture
 
