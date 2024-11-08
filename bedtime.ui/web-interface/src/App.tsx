@@ -45,6 +45,7 @@ function App() {
     }
   };
 
+  // Check if there's a drawing on the canvas at intervals
   useEffect(() => {
     const interval = setInterval(() => {
       if (canvasRef.current) {
@@ -53,6 +54,47 @@ function App() {
     }, 100);
     return () => clearInterval(interval);
   }, []);
+
+  // Submit function to capture canvas data and make API call
+  const handleSubmit = async () => {
+    const canvasData = canvasRef.current?.getBase64FromCanvas();
+  
+    if (canvasData) {
+      // Log the base64 data to verify it's correct
+      console.log("Canvas Data:", canvasData);
+  
+      try {
+        const response = await fetch('/infer/sketchclassify', { // Use relative path          
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            image_base64: canvasData
+          }),
+        });
+  
+        if (response.ok) {
+          const result = await response.json();
+          showToast({ 
+            message: `\n Thats an amazing ${result.prediction}, I'm  ${result.confidence * 100}% confident`, 
+            theme 
+          });
+                  } else {
+          // Log additional error details for clarity
+          console.error("Submission failed:", response.status, response.statusText);
+          showToast({ message: `Submission failed with status ${response.status}.`, theme });
+        }
+      } catch (error) {
+        console.error('Error submitting data:', error);
+        showToast({ message: 'Network error.', theme });
+      }
+    } else {
+      console.warn("No canvas data available.");
+      showToast({ message: 'Canvas is empty.', theme });
+    }
+  };
+  
 
   // Floating animation with react-spring
   const floatingAnimation = useSpring({
@@ -102,10 +144,9 @@ function App() {
         <DrawingCanvas ref={canvasRef} />
 
         <div className="button-container">
-          <button onClick={handleDownloadCanvas}>
-            Download
-          </button>
+          <button onClick={handleDownloadCanvas}>Download</button>
           <button onClick={handleClearCanvas}>Clear</button>
+          <button onClick={handleSubmit}>Submit</button> {/* Submit Button */}
         </div>
 
         <div className="audio-player-section">

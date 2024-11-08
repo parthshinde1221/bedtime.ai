@@ -5,6 +5,8 @@ export type DrawingCanvasHandle = {
   clearCanvas: () => void;
   downloadCanvas: () => void;
   hasDrawing: () => boolean;
+  getCanvasData: () => string | null; // Add this line
+  getBase64FromCanvas: () => string | null;
 };
 
 const DrawingCanvas = forwardRef<DrawingCanvasHandle>((_, ref) => {
@@ -57,6 +59,45 @@ const DrawingCanvas = forwardRef<DrawingCanvasHandle>((_, ref) => {
       );
       return !pixelBuffer.every((pixel) => pixel === 0); // Check if any pixel is not empty
     },
+    getCanvasData() {
+      return canvasRef.current ? canvasRef.current.toDataURL('image/png') : null;
+    },
+    getBase64FromCanvas() {
+        if (!canvasRef.current) {
+          console.error("Canvas reference is not available.");
+          return null;
+        }
+      
+        const canvas = canvasRef.current;
+        const tempCanvas = document.createElement('canvas');
+        tempCanvas.width = canvas.width;
+        tempCanvas.height = canvas.height;
+        const tempContext = tempCanvas.getContext('2d');
+      
+        if (!tempContext) {
+          console.error("Temporary canvas context is not available.");
+          return null;
+        }
+      
+        // Fill temp canvas with a white background
+        tempContext.fillStyle = '#ffffff';
+        tempContext.fillRect(0, 0, tempCanvas.width, tempCanvas.height);
+      
+        // Draw the actual content on top
+        tempContext.drawImage(canvas, 0, 0);
+      
+        // Convert temp canvas to base64
+        try {
+          const dataURL = tempCanvas.toDataURL('image/png');
+          return dataURL.replace(/^data:image\/png;base64,/, '');
+        } catch (error) {
+          console.error("Error encoding canvas to base64:", error);
+          return null;
+        }
+      
+      
+    }
+    
   }));
 
   const startDrawing = (event: React.MouseEvent) => {
