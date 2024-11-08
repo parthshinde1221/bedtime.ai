@@ -1,22 +1,32 @@
 import { useState, useEffect, useRef } from 'react';
+import { useSpring, animated } from '@react-spring/web';
 import { showToast, CustomToastContainer } from './components/CustomToast';
 import DrawingCanvas, { DrawingCanvasHandle } from './components/DrawingCanvas';
 import gura from './assets/gura.png';
-import gura2 from './assets/gura2.png';
 import AudioPlayer from './components/AudioPlayer';
 import './App.css';
+
+function importAllImages() {
+  const images = import.meta.glob('./assets/demo*.png', { eager: true });
+  return Object.values(images).map((module: any) => module.default);
+}
 
 function App() {
   const [theme, setTheme] = useState<'mocha' | 'latte'>('mocha');
   const canvasRef = useRef<DrawingCanvasHandle>(null);
   const [isDownloadable, setIsDownloadable] = useState(false);
+  const [demoImages, setDemoImages] = useState<string[]>([]);
 
   const toggleTheme = () => {
     const newTheme = theme === 'mocha' ? 'latte' : 'mocha';
     setTheme(newTheme);
   };
 
+  // Load images and apply theme on mount and theme change
   useEffect(() => {
+    const images = importAllImages();
+    setDemoImages(images);
+
     document.documentElement.classList.remove('mocha-theme', 'latte-theme');
     document.documentElement.classList.add(`${theme}-theme`);
   }, [theme]);
@@ -44,6 +54,18 @@ function App() {
     return () => clearInterval(interval);
   }, []);
 
+  // Floating animation with react-spring
+  const floatingAnimation = useSpring({
+    from: { transform: 'translateY(0px) scale(1)' },
+    to: async (next) => {
+      while (true) {
+        await next({ transform: 'translateY(-20px) scale(1.05)' });
+        await next({ transform: 'translateY(20px) scale(0.95)' });
+      }
+    },
+    config: { duration: 4000 },
+  });
+
   return (
     <div className="app">
       <header className="app-header">
@@ -56,21 +78,25 @@ function App() {
             style={{ cursor: 'pointer' }}
           />
         </div>
-        <h1 className="app-title">Modern Deep Learning Interface</h1>
+        <h1 className="app-title">bedtime.ai</h1>
         <p className="app-description">
-          Welcome to a sleek and modern interface for deep learning applications.
+          Your wildest imagination turned into intriguing stories!
         </p>
       </header>
 
       <main className="main-content">
-        <div className="card-container">
-          <div className="card">
-            <img src={gura2} alt="Card Image" className="card-image" />
-            <div className="card-content">
-              <h2>Gura</h2>
-              <p>Train your models with cutting-edge algorithms and visualizations.</p>
-            </div>
-          </div>
+        {/* Floating animated demo images */}
+        <div className="floating-bubbles">
+          {demoImages.map((image, index) => (
+            <animated.div
+              key={index}
+              className="bubble"
+              style={{
+                ...floatingAnimation,
+                backgroundImage: `url(${image})`,
+              }}
+            />
+          ))}
         </div>
 
         <DrawingCanvas ref={canvasRef} />
@@ -88,11 +114,11 @@ function App() {
         </div>
       </main>
 
-      {/* Toast container */}
       <CustomToastContainer />
 
       <footer className="app-footer">
-        <p>© 2024 Modern Deep Learning Interface</p>
+        <p>Made with ❤️ with React and Catppuccin</p>
+        <p>© 2024 bedtime.ai</p>
       </footer>
     </div>
   );

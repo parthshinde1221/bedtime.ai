@@ -1,5 +1,5 @@
 import { useRef, useState, useEffect } from 'react';
-import { showToast, CustomToastContainer } from './CustomToast';
+import { showToast } from './CustomToast';
 import 'react-toastify/dist/ReactToastify.css';
 
 type AudioPlayerProps = {
@@ -72,7 +72,7 @@ const AudioPlayer = ({ theme }: AudioPlayerProps) => {
         </div>
       </div>
 
-      <CustomToastContainer />
+      {/* <CustomToastContainer /> */}
     </div>
   );
 };

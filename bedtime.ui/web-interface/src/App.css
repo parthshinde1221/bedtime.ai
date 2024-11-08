@@ -55,7 +55,7 @@ body {
 }
 
 .logo {
-  width: 60px;
+  width: 100px;
   transition: transform 0.3s ease;
 }
 
@@ -220,13 +220,6 @@ button:hover {
   color: var(--subtext1);
 }
 
-.canvas-container {
-  border: 2px solid #333;
-  border-radius: 15px;
-  display: inline-block;
-  overflow: hidden;
-}
-
 .button-container {
   display: flex;
   gap: 10px;
@@ -249,3 +242,28 @@ button:hover {
 }
 
 
+
+
+.floating-bubbles {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  justify-content: center;
+  margin-bottom: 40px;
+}
+
+.bubble {
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  background-size: cover;
+  background-position: center;
+  box-shadow: 0px 0px 20px var(--accent); /* Glow effect with accent color */
+  border: 2px solid var(--accent);        /* Border with accent color */
+  transition: transform 0.1s ease-in-out, box-shadow 0.2s ease-in-out;
+}
+
+.bubble:hover {
+  transform: scale(1.1);
+  box-shadow: 0px 0px 50px var(--accent); /* Enhanced glow effect on hover */
+}
