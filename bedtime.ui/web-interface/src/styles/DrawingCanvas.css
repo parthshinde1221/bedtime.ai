@@ -1,0 +1,7 @@
+/* App.css or DrawingCanvas.css */
+.custom-canvas {
+    cursor: url('../assets/pencil.png') 16 16, auto; /* Adjust the path and hotspot */
+    border-radius: 15px;
+    background-color: #ffffff;
+  }
+  
