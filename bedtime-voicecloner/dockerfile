@@ -1,0 +1,19 @@
+FROM ghcr.io/coqui-ai/tts
+
+# Install additional dependencies
+RUN pip install flask
+
+# Copy your custom server script
+COPY server.py /app/server.py
+
+# Set the working directory
+WORKDIR /app
+
+# Expose the port your service will run on
+EXPOSE 5000
+
+# Override the ENTRYPOINT to use python3
+ENTRYPOINT ["python3"]
+
+# Set the default command to your server script
+CMD ["server.py"]
