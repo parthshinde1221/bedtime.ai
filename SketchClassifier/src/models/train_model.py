@@ -40,14 +40,14 @@ def train_model(config):
         transforms.RandomResizedCrop(224, scale=(0.8, 1.0)),
         transforms.RandomHorizontalFlip(),
         transforms.ToTensor(),
-        transforms.Normalize(mean=[0.5], std=[0.5])  # Adjust as per your dataset
+        transforms.Normalize(mean=[0.5], std=[0.5])  
     ])
 
     val_transforms = transforms.Compose([
         transforms.Resize(224),
         transforms.CenterCrop(224),
         transforms.ToTensor(),
-        transforms.Normalize(mean=[0.5], std=[0.5])  # Adjust as per your dataset
+        transforms.Normalize(mean=[0.5], std=[0.5]) 
     ])
 
     # Create datasets

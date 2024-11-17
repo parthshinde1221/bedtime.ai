@@ -29,23 +29,19 @@ def sketch_classify(image_data: bytes):
     try:
         image_tensor = preprocess_image(image_data).to(device)
 
-        # Perform inference
         with torch.no_grad():
             output = model(image_tensor)
             probabilities = torch.nn.functional.softmax(output, dim=1)[0]
             confidence, predicted_idx = torch.max(probabilities, dim=0)
 
-            # Get the predicted label
             predicted_label = label_map.get(str(predicted_idx.item()), "Unknown")
 
-        # Return the structured response
         return {
             "prediction": predicted_label,
             "confidence": confidence.item()
         }
 
     except Exception as e:
-        # Return a structured error response if an error occurs
         raise HTTPException(
             status_code=500,
             detail={
