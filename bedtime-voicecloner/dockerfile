@@ -1,0 +1,14 @@
+# Use the Coqui TTS base image with GPU support
+FROM ghcr.io/coqui-ai/tts:latest
+
+# Set the working directory inside the container
+WORKDIR /app
+
+# Copy your custom server.py into the container
+COPY server.py /app/server.py
+
+# Expose the required port for the Flask app
+EXPOSE 5000
+
+# Override the entry point to run your server.py
+ENTRYPOINT ["python3", "server.py"]
