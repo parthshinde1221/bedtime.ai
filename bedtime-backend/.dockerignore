@@ -1,0 +1,7 @@
+# Ignore the virtual environment folder
+venv/
+
+# Ignore all other files except app folder and requirements.txt
+*
+!app/
+!requirements.txt

@@ -1,11 +1,13 @@
-# app/routers/items.py
-from fastapi import APIRouter
 from fastapi import APIRouter, File, UploadFile, HTTPException
 from app.services.sketchclassify import sketch_classify
 from pydantic import BaseModel
+from app.services.storybuilding import generate_story
+from fastapi.responses import FileResponse
 import base64
-router = APIRouter()
+import random  # Import random module
+import os
 
+router = APIRouter()
 
 class ImageData(BaseModel):
     image_base64: str
@@ -22,10 +24,22 @@ async def infer(image_data: ImageData):
                 status_code=400,
                 detail="No image provided or image is empty."
             )
-        return sketch_classify(image_bytes)
-
+        predictions=  sketch_classify(image_bytes)
+        
+        base64_audio = generate_story(predictions)
+        return {"success": True, "audio": base64_audio}
+ 
     except base64.binascii.Error:
         raise HTTPException(
             status_code=422,
             detail="Invalid base64-encoded data."
         )
+
+@router.post("/infer/update")
+async def infer_update(data: dict):
+    try:
+        # Pass the data dictionary directly to the generate_story function
+        base64_audio = generate_story(data)
+        return {"success": True, "audio": base64_audio}
+    except Exception as e:
+        return {"success": False, "error": str(e)}
