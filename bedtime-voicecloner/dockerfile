@@ -1,19 +1,14 @@
-FROM ghcr.io/coqui-ai/tts
+# Use the Coqui TTS base image with GPU support
+FROM ghcr.io/coqui-ai/tts:latest
 
-# Install additional dependencies
-RUN pip install flask
-
-# Copy your custom server script
-COPY server.py /app/server.py
-
-# Set the working directory
+# Set the working directory inside the container
 WORKDIR /app
 
-# Expose the port your service will run on
+# Copy your custom server.py into the container
+COPY server.py /app/server.py
+
+# Expose the required port for the Flask app
 EXPOSE 5000
 
-# Override the ENTRYPOINT to use python3
-ENTRYPOINT ["python3"]
-
-# Set the default command to your server script
-CMD ["server.py"]
+# Override the entry point to run your server.py
+ENTRYPOINT ["python3", "server.py"]
